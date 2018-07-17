@@ -39,6 +39,8 @@ import io.plaidapp.core.designernews.data.users.UserRemoteDataSource
 import io.plaidapp.core.designernews.data.users.UserRepository
 import io.plaidapp.core.designernews.domain.CommentsUseCase
 import io.plaidapp.core.designernews.domain.CommentsWithRepliesUseCase
+import io.plaidapp.core.designernews.domain.PostCommentUseCase
+import io.plaidapp.core.designernews.domain.PostReplyUseCase
 import io.plaidapp.core.loggingInterceptor
 import io.plaidapp.core.provideCoroutinesContextProvider
 import io.plaidapp.core.provideSharedPreferences
@@ -133,6 +135,22 @@ fun provideCommentsUseCase(
     userRepository: UserRepository,
     contextProvider: CoroutinesContextProvider
 ) = CommentsUseCase(commentsWithCommentsWithRepliesUseCase, userRepository, contextProvider)
+
+fun providePostReplyUseCase(context: Context): PostReplyUseCase {
+    val service = provideDesignerNewsService(context)
+    val commentsRepository = provideCommentsRepository(
+        provideDesignerNewsCommentsRemoteDataSource(service))
+    val loginRepository = provideDesignerNewsLoginRepository(context)
+    return PostReplyUseCase(commentsRepository, loginRepository, provideCoroutinesContextProvider())
+}
+
+fun providePostCommentUseCase(context: Context): PostCommentUseCase {
+    val service = provideDesignerNewsService(context)
+    val commentsRepository = provideCommentsRepository(
+        provideDesignerNewsCommentsRemoteDataSource(service))
+    val loginRepository = provideDesignerNewsLoginRepository(context)
+    return PostCommentUseCase(commentsRepository, loginRepository, provideCoroutinesContextProvider())
+}
 
 private fun provideUserRemoteDataSource(service: DesignerNewsService) =
         UserRemoteDataSource(service)

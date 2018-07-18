@@ -14,25 +14,29 @@
  * limitations under the License.
  */
 
-package io.plaidapp.designernews.ui
+package io.plaidapp.dribbble.ui
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
+import android.content.Context
 import io.plaidapp.core.data.CoroutinesContextProvider
-import io.plaidapp.core.designernews.data.login.LoginRepository
-import io.plaidapp.designernews.ui.login.LoginViewModel
+import io.plaidapp.dribbble.provideGetShareShotInfoUseCase
+import io.plaidapp.dribbble.ui.shot.DribbbleShotViewModel
 
 /**
- * Factory for Designer News [ViewModel]s
+ * Factory for Dribbble [ViewModel]s
  */
-class DesignerNewsViewModelFactory(
-    private val loginRepository: LoginRepository,
-    private val contextProvider: CoroutinesContextProvider
+class DribbbleViewModelFactory(
+    private val contextProvider: CoroutinesContextProvider,
+    private val context: Context
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
-            return LoginViewModel(loginRepository, contextProvider) as T
+        if (modelClass.isAssignableFrom(DribbbleShotViewModel::class.java)) {
+            return DribbbleShotViewModel(
+                contextProvider,
+                provideGetShareShotInfoUseCase(context)
+            ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

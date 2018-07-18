@@ -42,4 +42,15 @@ repositories {
 
 dependencies {
     implementation project(':app')
+
+    testImplementation project(':test_shared')
+    testImplementation "junit:junit:${versions.junit}"
+    testImplementation "org.mockito:mockito-core:${versions.mockito}"
+    testImplementation "android.arch.core:core-testing:${versions.lifecycle}"
+}
+
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
 }
